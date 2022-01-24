@@ -5,6 +5,8 @@ import { useGlobalState } from '../GlobalStateProvider';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import '../App.css';
+import { Register } from './Register';
 
 export const Login = () => {
     const { setState } = useGlobalState();
@@ -12,13 +14,15 @@ export const Login = () => {
     const [ users, setUsers ] = useState<any>([]);
     const [ loginUser, setLoginUser ] = useState("");
     const [ loginPass, setLoginPass ] = useState("");
+    const [ modalShow, setModalShow ] = useState(false);
+
     const guest: User = {id: 0, active: true, admin: false, username: "", password: ""};
     const getData = async() => {
         await axios.get("http://localhost:3001/users").then((res) => {
         setUsers((res.data));
       })
     }
-  
+
     const pushToGlobalState = (data: Partial<User>) => {
       setState((prev) => ({ ...prev, ...data}))
     }
@@ -44,57 +48,50 @@ export const Login = () => {
     }, []);
 
     return (
+        <>
+        <div className="spacer" />
         <Container>
-            <Stack gap={3}>
             <Row>
-                <Col md={3}>
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control 
-                        type="text"
-                        value={loginUser}
-                        onChange={e => setLoginUser(e.target.value)}
-                    />
+                <Col md={{span: 4, offset: 4}}>
+                    <Stack gap={3}>
+                        <Form.Control 
+                            type="text"
+                            value={loginUser}
+                            onChange={e => setLoginUser(e.target.value)}
+                            placeholder='Username'
+                        />
+                        <Form.Control
+                            type="password"
+                            id="inputPassword5"
+                            value={loginPass}
+                            onChange={e => setLoginPass(e.target.value)}
+                            placeholder='Password'
+                        />
+                        <div className="d-grid gap-2">
+                            <Button variant="dark" size="lg" onClick={authLogin}>
+                                Login
+                            </Button>
+                        </div>
+                        <div className="d-grid gap-2">
+                            <Button variant="outline-dark" size="lg" onClick={() => setModalShow(true)}>
+                                Register
+                            </Button>
+                            <Register 
+                                users={users}
+                                show={modalShow}
+                                onHide={() => setModalShow(false)}
+                            />
+                        </div>
+                        <div className="d-grid gap-2">
+                            <Button variant="link" size="sm" style={{color: "gray"}} onClick={guestLogin}>
+                                Login as guest
+                            </Button>
+                        </div>
+                    </Stack>
                 </Col>
             </Row>
-            <Row>
-                <Col md={3}>
-                    <Form.Label htmlFor="inputPassword5">Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        id="inputPassword5"
-                        value={loginPass}
-                        onChange={e => setLoginPass(e.target.value)}
-                    />
-                </Col>
-            </Row>    
-            <Row>
-                <Col md={3}>
-                    <div className="d-grid gap-2">
-                        <Button variant="dark" size="lg" onClick={authLogin}>
-                            Login
-                        </Button>
-                    </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col md={3}>
-                    <div className="d-grid gap-2">
-                        <Button variant="outline-dark" size="lg">
-                            Register
-                        </Button>
-                    </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col md={3}>
-                    <div className="d-grid gap-2">
-                        <Button variant="link" size="sm" style={{color: "gray"}} onClick={guestLogin}>
-                            Login as guest
-                        </Button>
-                    </div>
-                </Col>
-            </Row>
-            </Stack>
         </Container>
+    
+        </>
     );
 }

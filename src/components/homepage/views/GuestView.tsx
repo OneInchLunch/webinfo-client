@@ -1,7 +1,15 @@
-export const GuestView = () => {
+import { FC } from "react";
+import { Button } from "react-bootstrap";
+export const GuestView: FC<Post> = (posts): JSX.Element => {
+    const logit = () => {
+        console.log(posts);
+    };
+    
     return (
     <>
-    Guest
+        <Button onClick={logit}>
+            logit
+        </Button>
     </>
     );
 }
