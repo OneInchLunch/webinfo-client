@@ -12,7 +12,7 @@ export const Login = () => {
     const [ users, setUsers ] = useState<any>([]);
     const [ loginUser, setLoginUser ] = useState("");
     const [ loginPass, setLoginPass ] = useState("");
-    const guest: User = {id: 0, active: true, admin: false, username: "guest", password: ""};
+    const guest: User = {id: 0, active: true, admin: false, username: "", password: ""};
     const getData = async() => {
         await axios.get("http://localhost:3001/users").then((res) => {
         setUsers((res.data));

@@ -1,7 +1,7 @@
 export const UserView = () => {
     return (
     <>
-    asdg
+    User
     </>
     );
 }

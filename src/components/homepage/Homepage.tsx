@@ -1,18 +1,22 @@
-import { Button } from "react-bootstrap"
 import { useGlobalState } from "../../GlobalStateProvider";
+import { AdminView } from "./views/AdminView";
+import { GuestView } from "./views/GuestView";
+import { UserView } from "./views/UserView";
 
 export const Homepage = () => {
     const { state } = useGlobalState();
 
-    const logit = () => {
-        console.log(state);
-    }
-
     return (
     <>
-        <Button onClick={logit}>
-            logit
-        </Button>
+        {state.username === ""  &&
+            <GuestView />}
+        {
+        state.admin ?
+            <AdminView />
+        :
+            <UserView />
+        }
+
     </>
     );
 }
