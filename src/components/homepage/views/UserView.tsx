@@ -8,7 +8,7 @@ export const UserView = () => {
     const navigate = useNavigate();
 
     const logit = () => {
-        console.log(state.id, undefined);
+        console.log(state);
     };
 
     useEffect(() => {

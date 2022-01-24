@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, Modal, Stack } from "react-bootstrap";
-import { isAsteriskToken } from "typescript";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { useGlobalState } from "../GlobalStateProvider";
 
 export const Register = (props: any) => {
+    const { setState } = useGlobalState();
+    const navigate = useNavigate();
     const [ regUser, setRegUser ] = useState("");
     const [ regPass, setRegPass ] = useState("");
     const [ validated, setValidated ] = useState(false);
     const [ valid, setValid ] = useState(false);
     const [ errMsg, setErrMsg ] = useState("");
-    const [ taken, setTaken ] = useState(false);
+    const [ taken, setTaken ] = useState(false);    
+
+    const pushToGlobalState = (data: Partial<User>) => {
+        setState((prev) => ({ ...prev, ...data}))
+      }
 
     const isNotValid = (value: any) => {
         setRegUser(value);
@@ -18,7 +26,6 @@ export const Register = (props: any) => {
                     setValid(false);
                     setTaken(true);
                     setErrMsg("Username is already taken");
-                    console.log(taken);
                 }
             });
             if (!taken) {
@@ -30,24 +37,42 @@ export const Register = (props: any) => {
         }
     };
 
+    const addUser = () => {
+        axios.post("http://localhost:3001/insert", {
+            id: null,
+            active: 1,
+            admin: 0,
+            username: regUser,
+            password: regPass
+        });
+    };
+
     const handleSubmit = (event: any) => {
         event.preventDefault();
         const form = event.currentTarget;
         isNotValid(form[1].value);
         if (form.checkValidity() === false) {
-            setValidated(true);
             event.stopPropagation();
         }
-        console.log("Taken: " + taken)
-        console.log("Valid: " + valid)
         if(taken) {
             setRegUser('');
             setTaken(false);
         }
+        else if(!taken && valid){
+            addUser();
+            pushToGlobalState({
+                id: props.users.length,
+                active: true,
+                admin: false,
+                username: regUser,
+                password: regPass
+            });
+            navigate('/home');
+        }
+        setValidated(true);
     };
 
     const handleChange = (value: any) => {
-        console.log(value);
         isNotValid(value); 
     }
 
