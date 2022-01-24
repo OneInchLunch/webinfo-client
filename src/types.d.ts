@@ -1,4 +1,4 @@
-interface user {
+interface User {
     id: number;
     active: boolean;
     admin: boolean;

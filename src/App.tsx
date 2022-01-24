@@ -1,26 +1,18 @@
 import './App.css';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { Login } from './components/Login';
+import { GlobalStateProvider } from "./GlobalStateProvider";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { Homepage } from './components/homepage/Homepage';
 
 const App = () => {
-  const [users, setUsers] = useState<any[]>([]);
-
-  const getData = () => {
-    axios.get("http://localhost:3001/users").then((res) => {
-      setUsers(res.data);
-    })
-  }
-  
-  useEffect(() => {
-    getData();
-  }, []);
-
   return (
-    <div className="App">
-      {users.map((user) => (
-        <h1 key={user.id}>{user.username}, {user.password}</h1>
-      ))}
-    </div>
+    <GlobalStateProvider>
+      <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/home" element={<Homepage />} />
+      </Routes>
+    </GlobalStateProvider>
   );
 }
 
