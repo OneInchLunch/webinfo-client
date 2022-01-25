@@ -16,7 +16,7 @@ export const Login = () => {
     const [ loginPass, setLoginPass ] = useState("");
     const [ modalShow, setModalShow ] = useState(false);
 
-    const guest: User = {id: 0, active: true, admin: false, username: "", password: ""};
+    const guest: Partial<User> = {id: 0, active: true, admin: false, username: "", password: ""};
     const getData = async() => {
         await axios.get("http://localhost:3001/users").then((res) => {
         setUsers((res.data));

@@ -34,13 +34,16 @@ export const AdminView = () => {
     };
 
     return (
-    <>
+    <>  
         <Button onClick={logit}>
             logit
         </Button>
         <Button onClick={handleAddUser}>
             add user
         </Button>
+        {users.map((user: User) => {
+            console.log(user)
+        })}
     </>
     );
 }

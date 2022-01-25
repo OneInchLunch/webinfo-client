@@ -1,4 +1,4 @@
-interface User {
+interface User extends Post {
     id: number;
     active: boolean;
     admin: boolean;
@@ -6,7 +6,12 @@ interface User {
     password: string;
 };
 
-interface Post {
+interface Post { 
+    id: number;
+    title: string
+    poster: string;
+    body: string;
+    img: string;
     [index: number]: {
         id: number;
         title: string
