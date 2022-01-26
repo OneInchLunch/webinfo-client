@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
 import { ContentPost } from "./ContentPost"
+import '../../App.css'
 
 export const Content = (props: any) => {
-    console.log(props)
     return (
-    <>
+    <div className="dark-bg">
         {
             props.posts.map((post: Post) => {
                 return <ContentPost key={post.id} {...post} />
             })
         }
-    </>
+    </div>
     );
 }

@@ -1,3 +1,15 @@
 .spacer {
     height: 30vh;
 }
+
+.rd-spacer {
+    height: 10vh;
+}
+
+.trd-spacer {
+    height: 20vh;
+}
+
+.sth-spacer {
+    height: 5vh;
+}

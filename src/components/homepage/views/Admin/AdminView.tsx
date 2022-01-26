@@ -1,10 +1,8 @@
 import { Button } from 'react-bootstrap';
-import { useGlobalState } from "../../../GlobalStateProvider";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
 export const AdminView = () => {
-    const { state } = useGlobalState();
     const [ users, setUsers ] = useState<any>([]);
 
     const getData = async() => {
@@ -30,6 +28,8 @@ export const AdminView = () => {
             password: "test2"
         }).then(() => { 
             getData();
+        }).catch(error => {
+            console.log(error);
         });
     };
 
@@ -41,9 +41,6 @@ export const AdminView = () => {
         <Button onClick={handleAddUser}>
             add user
         </Button>
-        {users.map((user: User) => {
-            console.log(user)
-        })}
     </>
     );
 }

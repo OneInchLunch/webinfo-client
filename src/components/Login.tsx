@@ -79,8 +79,7 @@ export const Login = () => {
                             <Register 
                                 users={users}
                                 show={modalShow}
-                                onHide={() => {setModalShow(false);
-                                        getData();}}
+                                onHide={() => {setModalShow(false);}}
                             />
                         </div>
                         <div className="d-grid gap-2">
