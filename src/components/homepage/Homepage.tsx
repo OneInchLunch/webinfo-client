@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useGlobalState } from "../../GlobalStateProvider";
-import { AdminView } from "./views/Admin/AdminView";
 import { GuestView } from "./views/GuestView";
-import { UserView } from "./views/UserView";
+import { UserAdminView } from "./views/UserAdminView";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import '../../App.css'
+import { BannedView } from "./views/BannedView";
 
 export const Homepage = () => {
     const { state } = useGlobalState();
@@ -30,16 +30,13 @@ export const Homepage = () => {
     }, [state.id])
 
     return (
-    <div className="dark-bg">
-        {state.username === ""  &&
-            <GuestView posts={posts}/>}
-        {
-        state.admin ?
-            <AdminView />
-        : state.username !== "" &&
-            <UserView />
+    <div>
+        {!state.active ?  
+            <BannedView /> :
+                state.username !== "" ?
+                    <UserAdminView posts={posts}/> :
+                    <GuestView posts={posts}/>
         }
-
     </div>
     );
 }

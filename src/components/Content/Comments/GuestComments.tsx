@@ -11,8 +11,8 @@ export const GuestComments = (props: any) => {
     const isMounted = useIsMounted();
 
     useEffect(() => {
-        const getData = async() => {
-            await axios.get("http://localhost:3001/users").then((res) => {
+        const getData = () => {
+            axios.get("http://localhost:3001/users").then((res) => {
             if (isMounted()) setUsers((res.data));
           })
         }

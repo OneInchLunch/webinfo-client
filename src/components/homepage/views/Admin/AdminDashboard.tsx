@@ -1,8 +1,8 @@
-import { Button } from 'react-bootstrap';
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { Content } from '../../../Content/Content';
 
-export const AdminView = () => {
+export const AdminDashboard = (posts: any) => {
     const [ users, setUsers ] = useState<any>([]);
 
     const getData = async() => {
@@ -35,12 +35,7 @@ export const AdminView = () => {
 
     return (
     <>  
-        <Button onClick={logit}>
-            logit
-        </Button>
-        <Button onClick={handleAddUser}>
-            add user
-        </Button>
+        <Content {...posts} />
     </>
     );
 }

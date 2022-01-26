@@ -2,25 +2,22 @@ import { useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useGlobalState } from "../../../GlobalStateProvider";
+import { Content } from "../../Content/Content";
 
-export const UserView = () => {
+export const UserAdminView = (posts: any) => {
     const { state } = useGlobalState();
     const navigate = useNavigate();
-
-    const logit = () => {
-        console.log(state);
-    };
 
     useEffect(() => {
         if(state.id===null)
             navigate("/login");
-    }, [])
+    }, [navigate, state.id])
 
     return (
     <>
-        <Button onClick={logit}>
-            logit
-        </Button>
+        {state.admin &&
+        <Button>Dashboard</Button>}
+        <Content {...posts}/>
     </>
     );
 }

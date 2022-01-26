@@ -31,9 +31,8 @@ export const Login = () => {
         users.forEach((user: Partial<User>) => {
             if (user.username === loginUser)
                 if (user.password === loginPass) {
-                    if(user.active)
-                        pushToGlobalState(user);
-                        navigate('/home');
+                    pushToGlobalState(user);
+                    navigate('/home');
                 }
         })
     }
@@ -62,18 +61,20 @@ export const Login = () => {
                         />
                         <Form.Control
                             type="password"
-                            id="inputPassword5"
+                            id="inputPassword"
                             value={loginPass}
                             onChange={e => setLoginPass(e.target.value)}
                             placeholder='Password'
                         />
                         <div className="d-grid gap-2">
-                            <Button variant="dark" size="lg" onClick={authLogin}>
+                            <Button variant="light" size="lg" onClick={authLogin}>
                                 Login
                             </Button>
                         </div>
                         <div className="d-grid gap-2">
-                            <Button variant="outline-dark" size="lg" onClick={() => setModalShow(true)}>
+                            <Button variant="outline-light" 
+                                    size="lg" 
+                                    onClick={() => setModalShow(true)}>
                                 Register
                             </Button>
                             <Register 
@@ -83,7 +84,9 @@ export const Login = () => {
                             />
                         </div>
                         <div className="d-grid gap-2">
-                            <Button variant="link" size="sm" style={{color: "gray"}} onClick={guestLogin}>
+                            <Button variant="link" 
+                                    style={{color: "white"}} 
+                                    onClick={guestLogin}>
                                 Login as guest
                             </Button>
                         </div>
