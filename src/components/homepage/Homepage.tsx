@@ -18,7 +18,7 @@ export const Homepage = () => {
     }, [state.id, navigate])
 
     const getPosts = async() => {
-        await axios.get("http://localhost:3001/posts").then((res) => {
+        await axios.get("http://192.168.1.10:3001/posts").then((res) => {
             setPosts(res.data);
         })
     }

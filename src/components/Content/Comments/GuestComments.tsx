@@ -12,12 +12,12 @@ export const GuestComments = (props: any) => {
 
     useEffect(() => {
         const getData = () => {
-            axios.get("http://localhost:3001/users").then((res) => {
+            axios.get("http://192.168.1.10:3001/users").then((res) => {
             if (isMounted()) setUsers((res.data));
           })
         }
         getData();
-    }, [])
+    }, [isMounted])
 
     useEffect(() => {
         console.log(props.comments);

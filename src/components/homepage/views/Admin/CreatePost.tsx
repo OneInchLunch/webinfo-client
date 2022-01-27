@@ -1,55 +1,23 @@
-import { useLocation } from "react-router-dom";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Comments } from "./Comments/Comments";
-import { Container, Row, Col, Stack, Image, Form, Button} from "react-bootstrap";
-import { useIsMounted } from "../../isMounted";
-import { useGlobalState } from "../../GlobalStateProvider";
+import { Container, Row, Col, Form, Stack, Button } from 'react-bootstrap';
+import { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useGlobalState } from '../../../../GlobalStateProvider';
 
-export const ExpandedPost = () => {
-    const location: any = useLocation();
-    const [ comments, setComments ] = useState<Comment[]>([]);
-    const [ editMode, setEditMode ] = useState(false);
-    const [ id, setId ] = useState();
+export const CreatePost = () => {
+    const [ validated, setValidated ] = useState(false);
+    const [ res, setRes ] = useState<number>(2406);
+    const [ valid ] = useState(true);
     const [ title, setTitle ] = useState("");
     const [ poster, setPoster ] = useState("");
     const [ body, setBody ] = useState("");
     const [ img, setImg ] = useState("");
-    const [ validated, setValidated ] = useState(false);
-    const [ res, setRes ] = useState<number>(2406);
-    const [ valid, setValid ] = useState(true);
+    const navigate = useNavigate();
     const { state } = useGlobalState();
-
-    const isMounted = useIsMounted();
-
-    useEffect(() => {
-        setId(location.state.id);
-        setTitle(location.state.title);
-        setPoster(location.state.poster);
-        setBody(location.state.body);
-        setImg(location.state.img);
-    }, [location.state])
-
-    const toggleEdit = () => {
-        setEditMode(!editMode);
-    }
-
-    useEffect(() => {
-        const getComments = () => {
-            axios.get("http://192.168.1.10:3001/comments", { 
-                params: {id: location.state.id}
-            }).then((res => {
-                if (isMounted()) setComments(res.data);
-            })).catch((err => {
-                throw(err);
-            }))
-        };
-        getComments();
-    }, []);
 
     const updatePost = () => {
         //console.log(`id: ${id},\ntitle: ${title},\nposter: ${poster},\nimg: ${img},\nbody: ${body}`)
-        axios.put("http://192.168.1.10:3001/updatePost", {id,title,poster,img,body})
+        axios.put("http://192.168.1.10:3001/updatePost", {id: null, title, poster, img, body})
         .then((response) => setRes(response.status));
     }
 
@@ -62,41 +30,13 @@ export const ExpandedPost = () => {
         }
         else if (valid) {
             updatePost();
+            navigate("/home");
         }
         setValidated(true);
     }
 
     return (
-    <>
-       { state.admin && 
-       <Button variant={editMode ? "primary" : "danger"} onClick={toggleEdit}>{editMode ? "Edit: On" : "Edit: Off"}</Button> }
-        { !editMode ?
-            <Container>
-            <div className="sth-spacer"/>
-                <Row>
-                    <Col>
-                        <Stack gap={3} className="text-white">
-                            <h1>{title}</h1>
-                            <h2>By: {poster !== "" ?
-                                    poster :
-                                    "unknown"}</h2>
-                            <div className="border"/>
-                            <div className="mx-auto">
-                                <Image className="postImage" 
-                                        style={{minWidth: "65vh", minHeight: "35vh", maxWidth: "80vh", maxHeight: "65vh"}} 
-                                        thumbnail src={img} />
-                            </div>
-                            <div className="border"/>
-                            <p>{body}</p>
-                            <div className="border"/>
-                            <h4>Comments: </h4>
-                            <Comments comments={comments} id={location.state.id}/>
-                        </Stack>
-                    </Col>
-                </Row>
-            </Container>
-            :
-            <Container>
+        state.admin ? <Container>
             <div className="sth-spacer"/>
                 <h3 className="text-white text-center">Try toggling edit mode off to see how your changes would look</h3>
                 <div className="sth-spacer"/>
@@ -153,8 +93,8 @@ export const ExpandedPost = () => {
                     </Col>
                 </Row>
                 <div className="spacer"/>
-            </Container>
-        }
-    </>
+            </Container> 
+            :
+            navigate("/home")
     );
-}
+};

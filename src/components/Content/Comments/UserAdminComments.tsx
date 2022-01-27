@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react"
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
+import { getSyntheticLeadingComments } from "typescript";
 import { useGlobalState } from "../../../GlobalStateProvider";
 
 export const UserAdminComments = (props: any) => {
@@ -16,7 +17,7 @@ export const UserAdminComments = (props: any) => {
     }, [props.comments]);
 
     const getComments = () => {
-        axios.get("http://localhost:3001/comments", { 
+        axios.get("http://192.168.1.10:3001/comments", { 
             params: {id: props.id}
         }).then((res => {
             setComments(res.data);
@@ -38,9 +39,9 @@ export const UserAdminComments = (props: any) => {
         }
     }
 
-    const postComment = (id: any = null, location: string) => {
-        axios.post(`http://localhost:3001/${location}`, {
-            id: id,
+    const postComment = () => {
+        axios.post(`http://192.168.1.10:3001/postComment`, {
+            id: null,
             sectionid: props.id,
             body: userComment,
             commenter: state.username
@@ -48,6 +49,13 @@ export const UserAdminComments = (props: any) => {
             getComments();
         });
     };
+
+    const deleteComment = (id: number) => {
+        axios.delete('http://192.168.1.10:3001/deleteComment', {data: {id: id}})
+        .then(() => {
+            getComments();
+        })
+    }
     
     const handleSubmit = (event: any) => {
         event.preventDefault();
@@ -56,8 +64,8 @@ export const UserAdminComments = (props: any) => {
             event.stopPropagation();
         }
         else if (valid) {
-            postComment(null, "postComment");
-            console.log(userComment);
+            postComment();
+            setUserComment("");
         }
         setValidated(true);
     }
@@ -67,7 +75,7 @@ export const UserAdminComments = (props: any) => {
     }
 
     const handleDelete = (id: number) => {
-        postComment(id, "deleteComment");
+        deleteComment(id);
     }
 
     return (
@@ -97,7 +105,7 @@ export const UserAdminComments = (props: any) => {
                 <thead style={{backgroundColor: "grey"}}>
                     <tr>
                         <th>
-                            {comment.commenter} says:
+                            <p>{comment.commenter} says:</p>
                         </th>
                         { state.admin ? <th>
                             <Button 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Form, Modal, Stack } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
@@ -38,7 +38,7 @@ export const Register = (props: any) => {
     };
 
     const addUser = () => {
-        axios.post("http://localhost:3001/insert", {
+        axios.post("http://192.168.1.10:3001/insert", {
             id: null,
             active: 1,
             admin: 0,

@@ -12,29 +12,25 @@ export const ContentPost = (post: Post) => {
         <Container>
             <Row>
                 <Col md={{span: 6, offset: 3}}>
-                    <Card>
+                    <Card className="corners">
                         <Card.Img variant="top" src={post.img} style={{minHeight: "40vh", maxHeight: "40vh"}} />
-                        <Card.Body>
-                        <Card.Title>
-                            <Button onClick={handleClick}
-                                    variant="link"
-                                    className="text-black"
-                                    style={{textDecoration: "none"}}>
+                        <Card.Body as="button" className="btn-invis text-start" onClick={handleClick} style={{minHeight: "2vh"}}>
+                        <Card.Title style={{padding: "0 0.75rem 0 0.75rem"}}>
                                 {post.title}
-                            </Button>
-                            <Card.Subtitle
-                                style={{color: "grey",
-                                        paddingLeft: "0.75rem"}}>
-                                {post.poster !== "" ?
-                                post.poster :
-                                "unknown"}
-                            </Card.Subtitle>
                         </Card.Title>
+                        <Card.Subtitle 
+                            style={{
+                                color: "grey",
+                                padding: "0 0.75rem 0 0.75rem",
+                                }}>
+                            {post.poster !== "" ?
+                            post.poster :
+                            "unknown"}
+                        </Card.Subtitle>
                         <Card.Text
+                            className="overflowing"
                             style={{
                                 padding: "0 0.75rem 0 0.75rem",
-                                overflow: "hidden",
-                                textOverflow: "elipsis"
                             }}>
                             {post.body}
                         </Card.Text>
