@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Button, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { ModifyUser } from './ModifyUser';
 
 export const UserList = () => {
@@ -20,7 +20,7 @@ export const UserList = () => {
 
     useEffect(() => {
         const getData = () => {
-            axios.get("http://192.168.1.10:3001/users").then((res) => {
+            axios.get("http://localhost:3001/users").then((res) => {
                 setUsers((res.data));
             })
             .catch((error) => {
@@ -38,6 +38,7 @@ export const UserList = () => {
 
     return (
         <>
+        <div className="rd-spacer"/>
         <Table variant="dark" striped bordered hover>
             <thead>
                 <tr>
@@ -63,11 +64,12 @@ export const UserList = () => {
                     )}
             </tbody>
         </Table>
-        <ModifyUser 
+        {users ? <ModifyUser 
             user={modalUser}
+            users={users}
             show={modalShow}
             onHide={() => {setModalShow(false);}}
-            new={newUser} />
+            new={newUser ? 1 : 0} /> : ""}
         </>
 
     );

@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react"
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
-import { getSyntheticLeadingComments } from "typescript";
 import { useGlobalState } from "../../../GlobalStateProvider";
 
 export const UserAdminComments = (props: any) => {
@@ -16,31 +15,31 @@ export const UserAdminComments = (props: any) => {
         setComments(props.comments)
     }, [props.comments]);
 
+    useEffect(() => {
+        setValidated(false);
+    }, [comments])
+
     const getComments = () => {
-        axios.get("http://192.168.1.10:3001/comments", { 
-            params: {id: props.id}
-        }).then((res => {
-            setComments(res.data);
-        })).catch((err => {
-            throw(err);
-        }))
+        axios.get("http://localhost:3001/comments", {params: {id: props.id}})
+        .then(result => setComments(result.data))
+        .catch(error => console.log(error))
     };
 
     const isValid = (value: any) => {
         setUserComment(value);
         if (value.length > 0 && value.length < 2000)
             setValid(true);
-        else if (value.length === 0) {
+        else if (value === "") {
             setValid(false);
             setErrMsg("Please enter something!");
-        } else {
+        } else if (value.length > 2000){
             setValid(false);
             setErrMsg("Too many characters!");
         }
     }
 
     const postComment = () => {
-        axios.post(`http://192.168.1.10:3001/postComment`, {
+        axios.post(`http://localhost:3001/postComment`, {
             id: null,
             sectionid: props.id,
             body: userComment,
@@ -51,7 +50,7 @@ export const UserAdminComments = (props: any) => {
     };
 
     const deleteComment = (id: number) => {
-        axios.delete('http://192.168.1.10:3001/deleteComment', {data: {id: id}})
+        axios.delete('http://localhost:3001/deleteComment', {data: {id: id}})
         .then(() => {
             getComments();
         })
@@ -67,7 +66,9 @@ export const UserAdminComments = (props: any) => {
             postComment();
             setUserComment("");
         }
+        console.log(errMsg);
         setValidated(true);
+        setValid(false);
     }
 
     const handleChange = (value: any) => {
@@ -84,15 +85,18 @@ export const UserAdminComments = (props: any) => {
             <Form.Group controlId="comment">
             <Form.Control 
                 style={{borderRadius: "0", borderColor: "black", height: "10vh"}}
-                as="textarea" 
+                as="textarea"   
+                isValid={valid}
                 value={userComment}
                 onChange={e => handleChange(e.target.value)}
                 placeholder="Enter your comment here!" />
             </Form.Group>
-            <Form.Control.Feedback type="invalid">{errMsg}</Form.Control.Feedback>
             <Row>
                 <Col>
                     <Button variant="outline-light" size="lg" type="submit" style={{borderRadius: "0", margin: "2vh"}}>Post</Button>
+                </Col>
+                <Col md={6}>
+                    <h3 className="text-danger">{validated && !valid ? errMsg : ""}</h3>
                 </Col>
                 <Col>
                     <h3 style={{paddingTop: "3.5vh", textAlign: "right"}}>{userComment ? userComment.length : "0"}/2000</h3>
@@ -116,7 +120,7 @@ export const UserAdminComments = (props: any) => {
                                 onClick={() => handleDelete(comment.id)}>
                                 Delete 🗑️
                             </Button>
-                        </th> : ""}
+                        </th> : null}
                     </tr>
                 </thead>
                 <tbody style={{backgroundColor: "darkgrey"}}>

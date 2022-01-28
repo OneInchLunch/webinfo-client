@@ -5,6 +5,7 @@ import { Button, Form, Modal, Stack } from "react-bootstrap";
 export const ModifyUser = (props: any) => {
     const [ validated, setValidated ] = useState(false);
     const [ valid, setValid ] = useState(false);
+    const [ taken, setTaken ] = useState(false);
     const [ errMsg, setErrMsg ] = useState("");
     const [ id, setId ] = useState<any>();
     const [ admin, setAdmin ] = useState<number>();
@@ -14,55 +15,101 @@ export const ModifyUser = (props: any) => {
     const [ res, setRes ] = useState(2406);
 
     useEffect(() => {
-    setRes(2406);
-    setValidated(false);
-    if(!props.new) {
-        setId(props.user.id);
-        setAdmin(props.user.admin);
-        setActive(props.user.active);
-        setUsername(props.user.username);
-        setPassword(props.user.password);
-    } else {
-        setId(null);
-        setAdmin(0);
-        setActive(1);
-        setUsername("");
-        setPassword("");
-    }
-    }, [props])
+        setRes(2406);
+        if(!props.new) {
+            setId(props.user.id);
+            setAdmin(props.user.admin);
+            setActive(props.user.active);
+            setUsername(props.user.username);
+            setPassword(props.user.password);
+        } else {
+            setId(null);
+            setAdmin(0);
+            setActive(1);
+            setUsername("");
+            setPassword("");
+        }
+    }, [props.new, props.user, props.modalShow])
 
+    const isValid = (value: any) => {
+        setUsername(value);
+        if(username !== "") {
+            props.users.forEach((oldUser: Partial<User>) => {
+                if (oldUser.username === username) {
+                    setValid(false);
+                    setTaken(true);
+                    setErrMsg("Username is already taken!")
+                }
+            });
+            if(!taken && password !== "")
+                setValid(true);
+        }else if (username === "") {
+            setValid(false);
+            setErrMsg("Please enter a new username");
+        }    
+    }
+
+    
     const newUser = () => {
-        axios.post("http://192.168.1.10:3001/insert", {id, admin, active, username, password})
+        axios.post("http://localhost:3001/insert", {id, admin, active, username, password})
         .then((response) => {setRes(response.status);})
         .catch((error) => console.log(error));
     };
-
+    
     const modifyUser = () => {
-        axios.put("http://192.168.1.10:3001/updateUser", {id,admin,active,username,password})
+        axios.put("http://localhost:3001/updateUser", {id,admin,active,username,password})
         .then((response) => {setRes(response.status);})
         .catch((error) => console.log(error));
     }
-
+    
     const handleSubmit = (event: any) => {
         event.preventDefault();
         const form = event.currentTarget;
+        isValid(form[4].value);
         if (form.checkValidity() === false) {
             event.stopPropagation();
         }
-        props.new ?
-            newUser() :
-            modifyUser();
+        if(taken) {
+            setUsername('');
+            setTaken(false);
+        }
+        else if(!taken && valid) {
+            props.new ?
+                newUser() :
+                modifyUser();
+        }
+
+            setValidated(true);
+        }
         
-        setValidated(true);
+    const handleUserChange = (value: any) => {
+        isValid(value);
     }
+        /*  const handleSubmit = (event: any) => {
+            event.preventDefault();
+        const form = event.currentTarget;
+        isNotValid(form[1].value);
+        if (form.checkValidity() === false) {
+            event.stopPropagation();
+        }
+        if(taken) {
+            setRegUser('');
+            setTaken(false);
+        }
+        else if(!taken && valid){
+
+        }
+        setValidated(true);
+    }; */
+
 
     return (
         <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title-vcenter">
@@ -84,22 +131,14 @@ export const ModifyUser = (props: any) => {
                         placeholder='Automatic'
                     />
                     <Form.Label>Admin</Form.Label>
-                    <Form.Control 
-                        required
-                        isValid={valid}
-                        type="number"
-                        value={admin}
-                        onChange={e => setAdmin(+ e.target.value)}
-                        placeholder='Admin'
+                    <Form.Switch
+                        checked={admin ? true : false}
+                        onChange={e => setAdmin(+ e.target.checked)}
                     />
-                    <Form.Control.Feedback type="invalid">{errMsg}</Form.Control.Feedback>
-                    <Form.Label>Active</Form.Label>
-                    <Form.Control
-                        required
-                        type="number"
-                        value={active}
-                        onChange={e => setActive(+ e.target.value)}
-                        placeholder='Active'
+                     <Form.Label>Active</Form.Label>    
+                    <Form.Switch
+                        checked={active ? true : false}
+                        onChange={e => setActive(+ e.target.checked)}
                     />
                     <Form.Label>Username</Form.Label>
                     <Form.Control 
@@ -107,13 +146,14 @@ export const ModifyUser = (props: any) => {
                         isValid={valid}
                         type="text"
                         value={username}
-                        onChange={e => setUsername(e.target.value)}
+                        onChange={e => handleUserChange(e.target.value)}
                         placeholder='Username'
                     />
                     <Form.Control.Feedback type="invalid">{errMsg}</Form.Control.Feedback>
                     <Form.Label>Password</Form.Label>
                     <Form.Control
                         required
+                        isValid={valid}
                         type="password"
                         value={password}
                         onChange={e => setPassword(e.target.value)}

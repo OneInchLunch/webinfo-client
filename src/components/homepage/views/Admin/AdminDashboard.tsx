@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Container, Row, ToggleButtonGroup, Col, ToggleButton } from "react-bootstrap";
-import { Content } from '../../../Content/Content';
+import { NewPost } from "./NewPost";
 import { UserList } from "./UserList";
 
 export const AdminDashboard = (posts: any) => {
@@ -14,7 +14,7 @@ export const AdminDashboard = (posts: any) => {
       ];
 
     const getData = async() => {
-        await axios.get("http://192.168.1.10:3001/users").then((res) => {
+        await axios.get("http://localhost:3001/users").then((res) => {
         setUsers((res.data));
       })
     };
@@ -50,7 +50,7 @@ export const AdminDashboard = (posts: any) => {
                 {radioValue === '1' ? 
                     <UserList {...users}/>
                 :
-                <h1>New Post</h1>}
+                    <NewPost />}
             </Col>
         </Row>
     </Container>

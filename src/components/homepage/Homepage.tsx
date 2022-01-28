@@ -6,28 +6,29 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import '../../App.css'
 import { BannedView } from "./views/BannedView";
+import { useIsMounted } from "../../isMounted";
 
 export const Homepage = () => {
     const { state } = useGlobalState();
     const [ posts, setPosts ] = useState<Post[]>([]);
     const navigate = useNavigate();
+    const isMounted = useIsMounted();
 
     useEffect(() => {
         if(state.id === undefined)
             navigate("/login");
     }, [state.id, navigate])
 
-    const getPosts = async() => {
-        await axios.get("http://192.168.1.10:3001/posts").then((res) => {
-            setPosts(res.data);
-        })
-    }
-
     useEffect(() => {
-        if(state.id !== undefined) {
-            getPosts();
+        const getPosts = () => {
+            axios.get("http://localhost:3001/posts")
+            .then((res) => { if(isMounted()) setPosts(res.data);})
+            .catch((error) => console.log(error));
         }
-    }, [state.id])
+        if(state.id !== undefined) {
+            if(isMounted()) getPosts();
+        }
+    })
 
     return (
     <div>

@@ -38,7 +38,7 @@ export const Register = (props: any) => {
     };
 
     const addUser = () => {
-        axios.post("http://192.168.1.10:3001/insert", {
+        axios.post("http://locahost:3001/insert", {
             id: null,
             active: 1,
             admin: 0,

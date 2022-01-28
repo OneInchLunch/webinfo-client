@@ -18,10 +18,10 @@ export const Login = () => {
 
     const guest: Partial<User> = {id: 0, active: true, admin: false, username: "", password: ""};
     
-    const getData = async() => {
-        await axios.get("http://192.168.1.10:3001/users").then((res) => {
-        setUsers((res.data));
-      })
+    const getData = () => {
+        axios.get("http://localhost:3001/users")
+        .then(result => setUsers(result.data))
+        .catch(error => console.log(error))
     }
 
     const pushToGlobalState = (data: Partial<User>) => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import { Route, Router, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGlobalState } from "../../../GlobalStateProvider";
 import { Content } from "../../Content/Content";
 import { AdminDashboard } from "./Admin/AdminDashboard";

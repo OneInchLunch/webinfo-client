@@ -17,7 +17,7 @@ export const ExpandedPost = () => {
     const [ img, setImg ] = useState("");
     const [ validated, setValidated ] = useState(false);
     const [ res, setRes ] = useState<number>(2406);
-    const [ valid, setValid ] = useState(true);
+    const [ valid ] = useState(true);
     const { state } = useGlobalState();
 
     const isMounted = useIsMounted();
@@ -36,7 +36,7 @@ export const ExpandedPost = () => {
 
     useEffect(() => {
         const getComments = () => {
-            axios.get("http://192.168.1.10:3001/comments", { 
+            axios.get("http://localhost:3001/comments", { 
                 params: {id: location.state.id}
             }).then((res => {
                 if (isMounted()) setComments(res.data);
@@ -45,11 +45,10 @@ export const ExpandedPost = () => {
             }))
         };
         getComments();
-    }, []);
+    }, [isMounted, location.state.id]);
 
     const updatePost = () => {
-        //console.log(`id: ${id},\ntitle: ${title},\nposter: ${poster},\nimg: ${img},\nbody: ${body}`)
-        axios.put("http://192.168.1.10:3001/updatePost", {id,title,poster,img,body})
+        axios.put("http://localhost:3001/updatePost", {id,title,poster,img,body})
         .then((response) => setRes(response.status));
     }
 
@@ -68,8 +67,8 @@ export const ExpandedPost = () => {
 
     return (
     <>
-       { state.admin && 
-       <Button variant={editMode ? "primary" : "danger"} onClick={toggleEdit}>{editMode ? "Edit: On" : "Edit: Off"}</Button> }
+       { state.admin ? 
+       <Button variant={editMode ? "primary" : "danger"} onClick={toggleEdit}>{editMode ? "Edit: On" : "Edit: Off"}</Button> : "" }
         { !editMode ?
             <Container>
             <div className="sth-spacer"/>

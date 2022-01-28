@@ -16,8 +16,7 @@ export const CreatePost = () => {
     const { state } = useGlobalState();
 
     const updatePost = () => {
-        //console.log(`id: ${id},\ntitle: ${title},\nposter: ${poster},\nimg: ${img},\nbody: ${body}`)
-        axios.put("http://192.168.1.10:3001/updatePost", {id: null, title, poster, img, body})
+        axios.put("http://localhost:3001/updatePost", {id: null, title, poster, img, body})
         .then((response) => setRes(response.status));
     }
 
