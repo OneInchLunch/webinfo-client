@@ -4,6 +4,7 @@ import { Button, Form, Modal, Stack } from "react-bootstrap";
 
 export const ModifyUser = (props: any) => {
     const [ validated, setValidated ] = useState(false);
+    const [ justAdded, setJustAdded] = useState([]);
     const [ valid, setValid ] = useState(false);
     const [ taken, setTaken ] = useState(false);
     const [ errMsg, setErrMsg ] = useState("");
@@ -15,6 +16,7 @@ export const ModifyUser = (props: any) => {
     const [ res, setRes ] = useState(2406);
 
     useEffect(() => {
+        setValidated(false);
         setRes(2406);
         if(!props.new) {
             setId(props.user.id);
@@ -33,20 +35,31 @@ export const ModifyUser = (props: any) => {
 
     const isValid = (value: any) => {
         setUsername(value);
-        if(username !== "") {
+        if(value !== "") {
             props.users.forEach((oldUser: Partial<User>) => {
-                if (oldUser.username === username) {
-                    setValid(false);
+                if (oldUser.username === value) {
                     setTaken(true);
                     setErrMsg("Username is already taken!")
+                    if(!props.new)
+                        setTaken(false);
                 }
             });
-            if(!taken && password !== "")
+            justAdded.forEach((jA) => {
+                if (props.new && jA === value) {
+                    setTaken(true);
+                    setErrMsg("Username is already taken!");
+                }
+            });
+            if(!taken && password !== ""){
                 setValid(true);
-        }else if (username === "") {
+                setJustAdded(newArr => newArr.concat(value))
+                console.log(justAdded)}    
+            else
+                setValid(false);
+        }else if (value === "") {
             setValid(false);
             setErrMsg("Please enter a new username");
-        }    
+        }
     }
 
     
@@ -63,10 +76,14 @@ export const ModifyUser = (props: any) => {
     }
     
     const handleSubmit = (event: any) => {
+        setValidated(false);
         event.preventDefault();
         const form = event.currentTarget;
+        setPassword(form[5].value);
         isValid(form[4].value);
+        console.log("Valid: " + valid + "\nTaken: " + taken);
         if (form.checkValidity() === false) {
+            console.log("just to suffer")
             event.stopPropagation();
         }
         if(taken) {
@@ -79,12 +96,13 @@ export const ModifyUser = (props: any) => {
                 modifyUser();
         }
 
-            setValidated(true);
+        setValidated(true);
         }
         
     const handleUserChange = (value: any) => {
         isValid(value);
     }
+
 
     return (
         <Modal
@@ -145,13 +163,14 @@ export const ModifyUser = (props: any) => {
                     <Form.Control.Feedback type="invalid">Please enter a new password</Form.Control.Feedback>
                 </Stack>
             </Modal.Body>
-            <Modal.Footer>
-                {props.new ? 
+            <Modal.Footer style={{justifyContent: "space-between"}}>
+            Sometimes it doesn't submit the first time,<br /> keep submitting until it says you succeeded.
+                <div>{props.new ? 
                     <Button variant="dark" size="lg" type="submit">Add user</Button> 
                     :
                     <Button variant="dark" size="lg" type="submit">Update</Button>
                 }
-                <Button variant="outline-dark" size="lg" onClick={props.onHide}>Close</Button>
+                <Button style={{marginLeft: "0.75rem"}} variant="outline-dark" size="lg" onClick={props.onHide}>Close</Button></div>
             </Modal.Footer>
         </Form>
       </Modal>

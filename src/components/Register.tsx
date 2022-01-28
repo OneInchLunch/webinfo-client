@@ -31,7 +31,7 @@ export const Register = (props: any) => {
             if (!taken) {
                 setValid(true);
             }
-        } else if (regUser === "") {
+        } else if (value === "") {
             setValid(false);
             setErrMsg("Please enter a new username")
         }
