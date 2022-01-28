@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, Col, Container, Row, Button } from "react-bootstrap";
 import axios from "axios";
 import { useGlobalState } from "../../GlobalStateProvider";
+import parse from 'html-react-parser'
 
 export const ContentPost = (post: Post) => {
     const navigate = useNavigate();
@@ -61,7 +62,7 @@ export const ContentPost = (post: Post) => {
                             style={{
                                 padding: "0 0.75rem 0 0.75rem",
                             }}>
-                            {post.body}
+                            {parse(post.body)}
                         </Card.Text>
                         </Card.Body>
                     </Card>

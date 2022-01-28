@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Comments } from "./Comments/Comments";
 import { Container, Row, Col, Stack, Image, Form, Button} from "react-bootstrap";
 import { useIsMounted } from "../../isMounted";
+import parse from 'html-react-parser';
 import { useGlobalState } from "../../GlobalStateProvider";
 
 export const ExpandedPost = () => {
@@ -86,7 +87,7 @@ export const ExpandedPost = () => {
                                         thumbnail src={img} />
                             </div>
                             <div className="border"/>
-                            <p>{body}</p>
+                            <p>{parse(body)}</p>
                             <div className="border"/>
                             <h4>Comments: </h4>
                             <Comments comments={comments} id={location.state.id}/>

@@ -85,23 +85,6 @@ export const ModifyUser = (props: any) => {
     const handleUserChange = (value: any) => {
         isValid(value);
     }
-        /*  const handleSubmit = (event: any) => {
-            event.preventDefault();
-        const form = event.currentTarget;
-        isNotValid(form[1].value);
-        if (form.checkValidity() === false) {
-            event.stopPropagation();
-        }
-        if(taken) {
-            setRegUser('');
-            setTaken(false);
-        }
-        else if(!taken && valid){
-
-        }
-        setValidated(true);
-    }; */
-
 
     return (
         <Modal
