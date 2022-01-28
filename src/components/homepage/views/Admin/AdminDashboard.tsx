@@ -1,27 +1,15 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Container, Row, ToggleButtonGroup, Col, ToggleButton } from "react-bootstrap";
 import { NewPost } from "./NewPost";
 import { UserList } from "./UserList";
 
 export const AdminDashboard = (posts: any) => {
-    const [ users, setUsers ] = useState<any>([]);
     const [ radioValue, setRadioValue ] = useState('1');
 
     const radios = [
         { name: 'Users', value: '1' },
         { name: 'New Post', value: '2' },
       ];
-
-    const getData = async() => {
-        await axios.get("http://localhost:3001/users").then((res) => {
-        setUsers((res.data));
-      })
-    };
-
-    useEffect(() => {
-        getData();
-    }, []);
 
     return (
     <Container>  
@@ -48,7 +36,7 @@ export const AdminDashboard = (posts: any) => {
         <Row>
             <Col>
                 {radioValue === '1' ? 
-                    <UserList {...users}/>
+                    <UserList />
                 :
                     <NewPost />}
             </Col>

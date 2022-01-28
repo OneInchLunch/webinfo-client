@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
+import { useIsMounted } from '../../../../isMounted';
 import { ModifyUser } from './ModifyUser';
 
 export const UserList = () => {
@@ -15,20 +16,20 @@ export const UserList = () => {
             password: ""
         })
     const [ newUser, setNewUser ] = useState<boolean>();
-
+    const isMounted = useIsMounted();
     
 
     useEffect(() => {
         const getData = () => {
             axios.get("http://localhost:3001/users").then((res) => {
-                setUsers((res.data));
+               if(isMounted()) setUsers((res.data));
             })
             .catch((error) => {
                 console.log(error)
             })
         };
         getData();
-    }, [modalShow])
+    }, [modalShow, isMounted])
 
     const handleClick = (user: any, type: boolean) => {
         setModalUser(user);
