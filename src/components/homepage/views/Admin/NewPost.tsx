@@ -5,7 +5,7 @@ import { useGlobalState } from "../../../../GlobalStateProvider";
 
 export function NewPost() {
     const [ title, setTitle ] = useState("");
-    const [ poster, setPoster ] = useState<any>();
+    const [ poster, setPoster ] = useState<any>("");
     const [ body, setBody ] = useState("");
     const [ img, setImg ] = useState("");
     const [ validated, setValidated ] = useState(false);

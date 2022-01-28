@@ -4,7 +4,6 @@ import { GlobalStateProvider } from "./GlobalStateProvider";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Homepage } from './components/homepage/Homepage';
 import { ExpandedPost } from './components/Content/ExpandedPost';
-import { AdminDashboard } from './components/homepage/views/Admin/AdminDashboard';
 
 const App = () => {
   return (
