@@ -1,4 +1,4 @@
-import './App.css';
+import './assets/styles/App.css';
 import { Login } from './components/Login';
 import { GlobalStateProvider } from "./GlobalStateProvider";
 import { Navigate, Route, Routes } from "react-router-dom";

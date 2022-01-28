@@ -4,7 +4,6 @@ import { GuestView } from "./views/GuestView";
 import { UserAdminView } from "./views/UserAdminView";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import '../../App.css'
 import { BannedView } from "./views/BannedView";
 import { useIsMounted } from "../../isMounted";
 
